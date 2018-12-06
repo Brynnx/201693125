@@ -32,6 +32,7 @@
 #include "dsr-io.h"
 
 /* Our dsr device */
+// 用于存储dsr_dev的网络设备的结构体
 static struct net_device *dsr_dev;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 /* dsr_node must be static on some older kernels, otherwise it segfaults on
@@ -40,7 +41,9 @@ static struct dsr_node *dsr_node;
 #else
 struct dsr_node *dsr_node;
 #endif
+//接收包过滤器
 static int rp_filter = 0;
+//转发
 static int forwarding = 0;
 
 
@@ -52,14 +55,16 @@ static int dsr_dev_llrecv(struct sk_buff *skb, struct net_device *indev,
 static int dsr_dev_llrecv(struct sk_buff *skb, struct net_device *indev,
 			  struct packet_type *pt, struct net_device *orig_dev);
 #endif
-
+//包类型
 static struct packet_type dsr_packet_type = {
 	.type = __constant_htons(ETH_P_IP),
 	.func = dsr_dev_llrecv,
 };
-
+//用于生成接收IP数据报的buff 
+//param dsr包 网络设备
 struct sk_buff *dsr_skb_create(struct dsr_pkt *dp, struct net_device *dev)
 {
+	//接收ip数据报存储buff
 	struct sk_buff *skb;
 	char *buf;
 	int ip_len;
@@ -82,6 +87,7 @@ struct sk_buff *dsr_skb_create(struct dsr_pkt *dp, struct net_device *dev)
 		return NULL;
 	}
 
+	//首部16字节  将skb buff中的 转成首部
 	/* We align to 16 bytes, for ethernet: 2 bytes + 14 bytes header */
 #ifdef KERNEL26
 	skb_reserve(skb, LL_RESERVED_SPACE(dev));
@@ -116,7 +122,7 @@ struct sk_buff *dsr_skb_create(struct dsr_pkt *dp, struct net_device *dev)
 
 	return skb;
 }
-
+//生成下一跳的硬件首部
 int dsr_hw_header_create(struct dsr_pkt *dp, struct sk_buff *skb)
 {
 
@@ -145,7 +151,7 @@ int dsr_hw_header_create(struct dsr_pkt *dp, struct sk_buff *skb)
 	}
 	return 0;
 }
-
+//接收inet address 把 inet device UP 广播新的IP 
 static int dsr_dev_inetaddr_event(struct notifier_block *this,
 				  unsigned long event, void *ptr)
 {
@@ -196,7 +202,10 @@ static int dsr_dev_inetaddr_event(struct notifier_block *this,
 	};
 	return NOTIFY_DONE;
 }
-
+//net device 不同事件触发的不同操作
+/*
+REGISTER:CHANGE：UP：UNREGISTER：DOWN
+*/
 static int dsr_dev_netdev_event(struct notifier_block *this,
 				unsigned long event, void *ptr)
 {
@@ -296,6 +305,7 @@ static int dsr_dev_netdev_event(struct notifier_block *this,
 static int dsr_dev_start_xmit(struct sk_buff *skb, struct net_device *dev);
 static struct net_device_stats *dsr_dev_get_stats(struct net_device *dev);
 
+//设置设备地址
 static int dsr_dev_set_address(struct net_device *dev, void *p)
 {
 	struct sockaddr *sa = p;
@@ -319,18 +329,19 @@ static int dsr_dev_accept_fastpath(struct net_device *dev,
 	return -1;
 }
 #endif
+//将设备加入启动队列
 static int dsr_dev_open(struct net_device *dev)
 {
 	netif_start_queue(dev);
 	return 0;
 }
-
+//设备停止
 static int dsr_dev_stop(struct net_device *dev)
 {
 	netif_stop_queue(dev);
 	return 0;
 }
-
+//设备初始化
 static void dsr_dev_uninit(struct net_device *dev)
 {
 	struct dsr_node *dnode = (struct dsr_node *)dev->priv;
@@ -358,6 +369,7 @@ static void dsr_dev_uninit(struct net_device *dev)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 static int __init dsr_dev_setup(struct net_device *dev)
 #else
+	//启动具体设备
 static void __init dsr_dev_setup(struct net_device *dev)
 #endif
 {
@@ -411,7 +423,7 @@ static int dsr_dev_llrecv(struct sk_buff *skb,
 
 	return 0;
 }
-
+// device node 之间的 deliver
 int dsr_dev_deliver(struct dsr_pkt *dp)
 {
 	struct sk_buff *skb = NULL;
@@ -542,7 +554,7 @@ out_err:
 
 	return res;
 }
-
+//用于接收在用户空间产生的packet
 /* Main receive function for packets originated in user space */
 static int dsr_dev_start_xmit(struct sk_buff *skb, struct net_device *dev)
 {
@@ -596,7 +608,7 @@ static struct notifier_block netdev_notifier = {
 static struct notifier_block inetaddr_notifier = {
 	.notifier_call = dsr_dev_inetaddr_event,
 };
-
+//初始化设备 
 int dsr_dev_init(char *ifname)
 {
 	int res = 0;
