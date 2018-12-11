@@ -44,6 +44,7 @@
 				 * adding the DSR header. A better solution
 				 * should probably be found... */
 
+//枚举配置变量
 enum confval {
 #ifdef DEBUG
 	PrintDebug,
@@ -119,6 +120,7 @@ static struct {
 	"MAX_SALVAGE_COUNT", 15, QUANTA}
 };
 
+//dsr node结构 
 struct dsr_node {
 	struct in_addr ifaddr;
 	struct in_addr bcaddr;
@@ -150,12 +152,13 @@ struct dsr_node {
 #define ConfValToUsecs(cv) (confval_to_usecs(cv))
 
 extern struct dsr_node *dsr_node;
-
+//得到配置值
 static inline unsigned int get_confval(enum confval cv)
 {
 	unsigned int val = 0;
 
 	if (dsr_node) {
+		//都是先把这个节点加锁然后修改再解锁
 		DSR_SPIN_LOCK(&dsr_node->lock);
 		val = dsr_node->confvals[cv];
 		DSR_SPIN_UNLOCK(&dsr_node->lock);
