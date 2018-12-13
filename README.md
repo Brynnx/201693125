@@ -31,6 +31,10 @@
 	dsr-rtc.h  DSR route cache API 查增删冲洗
 	dsr-rtc-simple.c rtc entry一通操作
 	link-cache.c lc的node link 增删改查，更新开销，垃圾回收，输出cost
+	maint-buf.c 用于处理pre hop -> next hop之间时的信息传送所用buf
+	neigh.c 邻节点的结构、增删改查、系统崩溃恢复时间，邻节点表的维护
+	send-buf.c 增删改查send buf 
+
 	
 	
 
