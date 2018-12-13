@@ -11,13 +11,13 @@
 #include "dsr.h"
 
 #ifndef NO_GLOBALS
-
+//ack 请求选项构成
 struct dsr_ack_req_opt {
 	u_int8_t type;
 	u_int8_t length;
 	u_int16_t id;
 };
-
+//ack 选项构成
 struct dsr_ack_opt {
 	u_int8_t type;
 	u_int8_t length;
