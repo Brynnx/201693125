@@ -55,7 +55,7 @@ static TBL(neigh_tbl, NEIGH_TBL_MAX_LEN);
 static DSRUUTimer neigh_tbl_timer;
 #endif
 
-
+//结构
 struct neighbor {
 	list_t l;
 	struct in_addr addr;
@@ -64,7 +64,7 @@ struct neighbor {
 	struct timeval last_ack_req;
 	usecs_t t_srtt, rto, t_rxtcur, t_rttmin, t_rttvar, jitter;	/* RTT in usec */
 };
-
+//查询队列
 struct neighbor_query {
 	struct in_addr *addr;
 	struct neighbor_info *info;
@@ -106,6 +106,7 @@ static inline int crit_addr_id_inc(void *pos, void *addr)
 	}
 	return 0;
 }
+//设置ack请求时间
 static inline int set_ack_req_time(void *pos, void *addr)
 {
 	struct in_addr *a = (struct in_addr *)addr;
@@ -117,7 +118,7 @@ static inline int set_ack_req_time(void *pos, void *addr)
 	}
 	return 0;
 }
-
+//计算恢复时间
 static inline int rto_calc(void *pos, void *query)
 {
 	struct neighbor_query *q = (struct neighbor_query *)query;
@@ -166,7 +167,7 @@ void NSCLASS neigh_tbl_garbage_timeout(unsigned long data)
 	/*      add_timer(&garbage_timer);       */
 	/* } */
 }
-
+//邻居表的创建
 static struct neighbor *neigh_tbl_create(struct in_addr addr,
 					 struct sockaddr *hw_addr,
 					 unsigned short id)
@@ -249,7 +250,7 @@ int NSCLASS neigh_tbl_set_ack_req_time(struct in_addr neigh_addr)
 {
 	return tbl_find_do(&neigh_tbl, &neigh_addr, set_ack_req_time);
 }
-
+//设置恢复时间
 int NSCLASS 
 neigh_tbl_set_rto(struct in_addr neigh_addr, struct neighbor_info *neigh_info)
 {
@@ -302,7 +303,7 @@ static int neigh_tbl_print(char *buf)
 	return len;
 
 }
-
+//邻居table进程信息
 static int
 neigh_tbl_proc_info(char *buffer, char **start, off_t offset, int length)
 {
