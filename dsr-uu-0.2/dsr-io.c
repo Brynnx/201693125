@@ -115,7 +115,7 @@ int NSCLASS dsr_recv(struct dsr_pkt *dp)
 
 	return 0;
 }
-
+//开始发送
 void NSCLASS dsr_start_xmit(struct dsr_pkt *dp)
 {
 	int res;
