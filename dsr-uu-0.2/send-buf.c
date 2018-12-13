@@ -35,7 +35,7 @@ TBL(send_buf, SEND_BUF_MAX_LEN);
 static DSRUUTimer send_buf_timer;
 static int send_buf_print(struct tbl *t, char *buffer);
 #endif
-
+//表项
 struct send_buf_entry {
 	list_t l;
 	struct dsr_pkt *dp;
@@ -67,12 +67,12 @@ static inline int crit_garbage(void *pos, void *n)
 	}
 	return 0;
 }
-
+//设置最大长度
 void NSCLASS send_buf_set_max_len(unsigned int max_len)
 {
 	send_buf.max_len = max_len;
 }
-
+//超过时间则garbage collecte
 void NSCLASS send_buf_timeout(unsigned long data)
 {
 	struct send_buf_entry *e;
@@ -107,7 +107,7 @@ void NSCLASS send_buf_timeout(unsigned long data)
 
 	set_timer(&send_buf_timer, &expires);
 }
-
+//生成表项
 static struct send_buf_entry *send_buf_entry_create(struct dsr_pkt *dp,
 						    xmit_fct_t okfn)
 {
@@ -124,7 +124,7 @@ static struct send_buf_entry *send_buf_entry_create(struct dsr_pkt *dp,
 
 	return e;
 }
-
+//包入队
 int NSCLASS send_buf_enqueue_packet(struct dsr_pkt *dp, xmit_fct_t okfn)
 {
 	struct send_buf_entry *e;
@@ -171,7 +171,7 @@ int NSCLASS send_buf_enqueue_packet(struct dsr_pkt *dp, xmit_fct_t okfn)
 
 	return res;
 }
-
+//判断buf携带信息类型
 int NSCLASS send_buf_set_verdict(int verdict, struct in_addr dst)
 {
 	struct send_buf_entry *e;
@@ -235,7 +235,7 @@ int NSCLASS send_buf_set_verdict(int verdict, struct in_addr dst)
 	}
 	return pkts;
 }
-
+//清理缓冲区
 static inline int send_buf_flush(struct tbl *t)
 {
 	struct send_buf_entry *e;
