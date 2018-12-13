@@ -12,7 +12,7 @@
 #include "dsr-srt.h"
 
 #ifndef NO_GLOBALS
-
+//路由应答
 struct dsr_rrep_opt {
 	u_int8_t type;
 	u_int8_t length;
@@ -40,7 +40,7 @@ struct dsr_rrep_opt {
 
 int dsr_rrep_opt_recv(struct dsr_pkt *dp, struct dsr_rrep_opt *rrep_opt);
 int dsr_rrep_send(struct dsr_srt *srt, struct dsr_srt *srt_to_me);
-
+//路由应答table操纵
 void grat_rrep_tbl_timeout(unsigned long data);
 int grat_rrep_tbl_add(struct in_addr src, struct in_addr prev_hop);
 int grat_rrep_tbl_find(struct in_addr src, struct in_addr prev_hop);
