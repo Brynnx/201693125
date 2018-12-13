@@ -21,7 +21,7 @@
 #include "link-cache.h"
 #include "neigh.h"
 #include "maint-buf.h"
-
+//添加ack选项
 struct dsr_ack_opt *dsr_ack_opt_add(char *buf, int len, struct in_addr src,
 				    struct in_addr dst, unsigned short id)
 {
@@ -38,7 +38,8 @@ struct dsr_ack_opt *dsr_ack_opt_add(char *buf, int len, struct in_addr src,
 
 	return ack;
 }
-
+//发送ack
+//过程是先产生源路由节点，下一跳，IP 首部， DSR选项的首部，DSR ACK选项的首部
 int NSCLASS dsr_ack_send(struct in_addr dst, unsigned short id)
 {
 	struct dsr_pkt *dp;
@@ -132,6 +133,7 @@ static struct dsr_ack_req_opt *dsr_ack_req_opt_create(char *buf, int len,
 }
 
 struct dsr_ack_req_opt *NSCLASS
+//add
 dsr_ack_req_opt_add(struct dsr_pkt *dp, unsigned short id)
 {
 	char *buf = NULL;
@@ -205,7 +207,7 @@ dsr_ack_req_opt_add(struct dsr_pkt *dp, unsigned short id)
       end:
 	return dsr_ack_req_opt_create(buf, DSR_ACK_REQ_HDR_LEN, id);
 }
-
+//send
 int NSCLASS dsr_ack_req_send(struct in_addr neigh_addr, unsigned short id)
 {
 	struct dsr_pkt *dp;
@@ -259,7 +261,7 @@ int NSCLASS dsr_ack_req_send(struct in_addr neigh_addr, unsigned short id)
 	dsr_pkt_free(dp);
 	return -1;
 }
-
+//recv req opt
 int NSCLASS dsr_ack_req_opt_recv(struct dsr_pkt *dp, struct dsr_ack_req_opt *ack_req_opt)
 {
 	unsigned short id;
@@ -281,7 +283,7 @@ int NSCLASS dsr_ack_req_opt_recv(struct dsr_pkt *dp, struct dsr_ack_req_opt *ack
 
 	return DSR_PKT_NONE;
 }
-
+//recv opt
 int NSCLASS dsr_ack_opt_recv(struct dsr_ack_opt *ack)
 {
 	unsigned short id;
