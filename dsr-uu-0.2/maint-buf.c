@@ -83,7 +83,7 @@ static inline int crit_addr_id_del(void *pos, void *data)
 	}
 	return 0;
 }
-
+//删除包
 /* Criteria function for deleting packets from buffer based on next hop */
 static inline int crit_addr_del(void *pos, void *data)
 {
@@ -185,7 +185,7 @@ static struct maint_entry *maint_entry_create(struct dsr_pkt *dp,
 	return m;
 }
 
-
+//回收缓冲区
 int NSCLASS maint_buf_salvage(struct dsr_pkt *dp)
 {
 	struct dsr_srt *alt_srt, *old_srt, *srt;
