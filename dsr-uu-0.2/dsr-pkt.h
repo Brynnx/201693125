@@ -22,6 +22,7 @@
 #define DEFAULT_TAILROOM 128
 
 /* Internal representation of a packet. For portability */
+//pkt 结构
 struct dsr_pkt {
 	struct in_addr src;	/* IP level data */
 	struct in_addr dst;
@@ -57,7 +58,7 @@ struct dsr_pkt {
 		};		
 		char *tail, *end;  
 	} dh;
-		
+	//pkt里面的一堆选项opt
 	int num_rrep_opts, num_rerr_opts, num_rreq_opts, num_ack_opts;
 	struct dsr_srt_opt *srt_opt;
 	struct dsr_rreq_opt *rreq_opt;	/* Can only be one */
