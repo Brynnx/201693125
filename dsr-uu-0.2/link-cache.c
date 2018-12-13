@@ -48,7 +48,7 @@ static struct lc_graph LC;
 #ifdef LC_TIMER
 #define LC_GARBAGE_COLLECT_INTERVAL 5 * 1000000	/* 5 Seconds */
 #endif				/* LC_TIMER */
-
+//结点
 struct lc_node {
 	list_t l;
 	struct in_addr addr;
@@ -59,7 +59,7 @@ struct lc_node {
 				 * cost if cost is hops. */
 	struct lc_node *pred;	/* predecessor */
 };
-
+//链表
 struct lc_link {
 	list_t l;
 	struct lc_node *src, *dst;
@@ -67,11 +67,11 @@ struct lc_link {
 	unsigned int cost;
 	struct timeval expires;
 };
-
+//队列
 struct link_query {
 	struct in_addr src, dst;
 };
-
+//开销最小的节点
 struct cheapest_node {
 	struct lc_node *n;
 };
@@ -79,7 +79,7 @@ struct cheapest_node {
 #ifdef __KERNEL__
 static int lc_print(struct lc_graph *LC, char *buf);
 #endif
-
+//删除链表
 static inline void __lc_link_del(struct lc_graph *lc, struct lc_link *link)
 {
 	/* Also free the nodes if they lack other links */
@@ -140,7 +140,7 @@ static inline int do_lowest_cost(void *pos, void *data)
 	}
 	return 0;
 }
-
+//更新更小开销
 static inline int do_relax(void *pos, void *node)
 {
 	struct lc_link *link = (struct lc_link *)pos;
@@ -221,7 +221,7 @@ void NSCLASS lc_garbage_collect_set(void)
 }
 
 #endif				/* LC_TIMER */
-
+//创建linkcache 节点
 static inline struct lc_node *lc_node_create(struct in_addr addr)
 {
 	struct lc_node *n;
@@ -239,7 +239,7 @@ static inline struct lc_node *lc_node_create(struct in_addr addr)
 
 	return n;
 };
-
+//遍寻链表
 static inline struct lc_link *__lc_link_find(struct tbl *t, struct in_addr src,
 					     struct in_addr dst)
 {
